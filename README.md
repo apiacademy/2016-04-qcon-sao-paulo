@@ -1,9 +1,6 @@
-# 2016-04 QCon Sao Paulo
-
-## API Design: from goals to deployment
+# API Design: from goals to deployment
 
 [![Join the chat at https://gitter.im/apiacademy/2016-04-qcon-sao-paulo](https://badges.gitter.im/apiacademy/2016-04-qcon-sao-paulo.svg)](https://gitter.im/apiacademy/2016-04-qcon-sao-paulo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 
 ## Description
 What makes Web APIs different than typical component APIs? How can you leverage the power of the Internet when creating your Web API? What characteristics to many "great" Web APIs share? Is there a consistent process you can use to make sure you design a Web API that best fits your needs both now and in the future?
