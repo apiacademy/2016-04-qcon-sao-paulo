@@ -26,9 +26,13 @@ Some background material and starter files will be posted to the Github repo a w
 ## Proposed Agenda
 
 ### Morning Session (9:15 - 13:00)
- * API Design Methodoloy (slides & exercises)
- * BREAK
- * The DORR Implementation Model, Part 1 (slides & exercises)
+ * API Design Methodology
+   - Slides (15min)
+   - API Design Exercise (30min)
+ * BREAK (30min)
+ * The DORR Implementation Model, Part 1
+   - Slides (15min)
+   - Data Model and Object Model Exercise (30min)
 
 ### Afternoon Session (14:30 - 18:15)
  * The DORR Implementation Model, Part 2 (slides & exercises)
