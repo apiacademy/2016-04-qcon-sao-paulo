@@ -7,7 +7,7 @@ What makes Web APIs different than typical component APIs? How can you leverage 
 
 ​In this full-day workshop Mike Amundsen and Eder Ignatowicz describe a clear methodology for designing Web APIs, based on his book "RESTful Web APIs", that allows you to map key aspects of your business model into a usable, scalable, and flexible interface that will reach your goals while creating a compelling API for both server and client developers.
 
-​Attendees will review business use cases, translate them into a list of concrete data and action identifiers, create clear workflow diagrams, and a usable set of API documentation. At the end of the workshop, you'll have a completed API design ready to pass along to client and server programmers to implement.
+​Attendees will first review business use cases, translate them into a list of concrete data and action identifiers, create clear workflow diagrams, and a usable set of API documentation. Then, armed with a details API Design document, attendees will work through a servies of coding exercises based on the *DORR Implementation Model* (Data, Objects, Resources, Representations).  At the end of the workshop, you'll have a completed API designed, coded, and deployed -- up and running.
 
 ​Whether you are looking to implement a private, partner, or public API, these principles will help you focus on the right metrics and design goals to create a successful API.
 
@@ -35,7 +35,11 @@ Some background material and starter files will be posted to the Github repo a w
    - Data Model and Object Model Exercise (30min)
 
 ### Afternoon Session (14:30 - 18:15)
- * The DORR Implementation Model, Part 2 (slides & exercises)
- * BREAK
- * Putting it All Together (Workshop Demos)
+ * The DORR Implementation Model, Part 2
+   - Slides (15min)
+   - Resource Model and Representation Model Exercise (30min)
+ * BREAK (30min)
+ * Putting it All Together
+   - Teams Show Their Working Demos (30mins)
+   - Summary Slides (15min)
  
