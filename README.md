@@ -1,6 +1,18 @@
 # 2016-04 QCon Sao Paulo
 
+## API Design: from goals to deployment
+
 [![Join the chat at https://gitter.im/apiacademy/2016-04-qcon-sao-paulo](https://badges.gitter.im/apiacademy/2016-04-qcon-sao-paulo.svg)](https://gitter.im/apiacademy/2016-04-qcon-sao-paulo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
+## Description
+What makes Web APIs different than typical component APIs? How can you leverage the power of the Internet when creating your Web API? What characteristics to many "great" Web APIs share? Is there a consistent process you can use to make sure you design a Web API that best fits your needs both now and in the future?
+
+​In this full-day workshop Mike Amundsen and Eder Ignatowicz describe a clear methodology for designing Web APIs, based on his book "RESTful Web APIs", that allows you to map key aspects of your business model into a usable, scalable, and flexible interface that will reach your goals while creating a compelling API for both server and client developers.
+
+​Attendees will review business use cases, translate them into a list of concrete data and action identifiers, create clear workflow diagrams, and a usable set of API documentation. At the end of the workshop, you'll have a completed API design ready to pass along to client and server programmers to implement.
+
+​Whether you are looking to implement a private, partner, or public API, these principles will help you focus on the right metrics and design goals to create a successful API.
 
 ## Prerequisites
  * You should be very familiar with JavaScript and have a good understanding of HTTP. Experience with HTML and CSS is a plus, but not required to get the most from the material.
