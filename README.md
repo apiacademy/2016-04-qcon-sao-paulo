@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/apiacademy/2016-04-qcon-sao-paulo](https://badges.gitter.im/apiacademy/2016-04-qcon-sao-paulo.svg)](https://gitter.im/apiacademy/2016-04-qcon-sao-paulo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Prerequisites:
+## Prerequisites
  * You should be very familiar with JavaScript and have a good understanding of HTTP. Experience with HTML and CSS is a plus, but not required to get the most from the material.
  * You should have access to a running instance of Node and be able to save your exercises and run them locally.
  * Starter Templates and Examples will be shared through Github. You will need to have a github account (or have access to one) to pull the project templates and have basic experience with Git.
