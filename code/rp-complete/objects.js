@@ -57,6 +57,9 @@ exports.task = function(args) {
     case 'complete':
       rtn = completeTask(name, id);
       break;  
+    case 'incomplete':
+      rtn = incompleteTask(name, id);
+      break;  
     default:
       rtn = null;
   }
@@ -137,6 +140,21 @@ function completeTask(elm, id) {
   }
   else {
     check.completed="true";
+    data({name:elm, action:'update', id:id, item:check});
+  }
+  return rtn;
+}
+
+// mark a task incompelete
+function incompleteTask(elm, id) {
+  var rtn, check;
+  
+  check = data({name:elm, action:'item', id:id});
+  if(check===null) {
+    rtn = utils.exception("File Not Found", "No record on file", 404);
+  }
+  else {
+    check.completed="false";
     data({name:elm, action:'update', id:id, item:check});
   }
   return rtn;
