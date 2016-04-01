@@ -32,12 +32,16 @@ Some background material and starter files will be posted to the Github repo a w
  * BREAK (30min)
  * The DORR Implementation Model, Part 1
    - Slides (15min)
-   - Data Model and Object Model Exercise (30min)
+   - Data Model Exercise (30min)
+   - Slides (15min)
+   - Object Model Exercise (30min) 
 
 ### Afternoon Session (14:30 - 18:15)
  * The DORR Implementation Model, Part 2
    - Slides (15min)
-   - Resource Model and Representation Model Exercise (30min)
+   - Resource Model Exercise (30min)
+   - Slides (15min)
+   - Representation Model Exercise (30min) 
  * BREAK (30min)
  * Putting it All Together
    - Teams Show Their Working Demos (30mins)

@@ -57,13 +57,7 @@ function main(req, res, parts, respond) {
       }
       break;
     case 'DELETE':
-      if(sw[0]!=="*") {
-        removeItem(req, res, respond, parts[0]);
-      }
-      else {
-        respond(req, res, utils.errorResponse(req, res, 'Method Not Allowed', 405));
-      }
-      break;
+      // insert an if-else that calls to removeItem
     default:
       respond(req, res, utils.errorResponse(req, res, 'Method Not Allowed', 405));
       break;
@@ -140,7 +134,7 @@ function removeItem(req, res, respond, id) {
   
   // execute
   try {
-    doc = objects.task({action:'remove', id:id});
+    doc = data({name:'task',action:'remove', id:id});
     if(doc && doc.type==='error') {
       doc = utils.errorResponse(req, res, doc.message, doc.code);    
     }

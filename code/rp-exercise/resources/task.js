@@ -38,11 +38,14 @@ function main(req, res, parts, respond) {
         default:
           switch(sw) {
             case "completed":
-              console.log(parts[1]);
-              sendCompleted(req, res, parts[1], respond);
+              //sendCompleted(req, res, parts[1], respond);
+              respond(req, res, 
+                utils.errorResponse(req, res, 'Resouce Not Found', 404));
               break;
             case "incomplete":
-              sendIncomplete(req, res, parts[1], respond);
+              //sendIncomplete(req, res, parts[1], respond);
+              respond(req, res, 
+                utils.errorResponse(req, res, 'Resouce Not Found', 404));
               break;
             default:
               sendItem(req, res, sw, respond);

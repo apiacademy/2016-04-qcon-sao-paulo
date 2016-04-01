@@ -1,0 +1,56 @@
+<alps>
+  <doc>Task System Profile</doc>
+
+  <!-- data elements -->
+  <descriptor id="id" type="semantic" />
+  <descriptor id="title" type="semantic" />
+  <descriptor id="completed" type="semantic" />
+  <descriptor id="dateCreated" type="semantic" />
+  <descriptor id="dateUpdated" type="semantic" />
+
+  <!-- action elements -->
+  <descriptor id="createTask" type="unsafe">
+    <descriptor href="#title" />
+    <descriptor href="#completed" />
+  </descriptor>
+
+  <descriptor id="readTask" type="safe">
+    <descriptor href="#id" />
+  </descriptor>
+
+  <descriptor id="updateTask" type="idempotent">
+    <descriptor href="#title" />
+    <descriptor href="#completed" />
+  </descriptor>
+
+  <descriptor id="removeTask" type="idempotent">
+    <descriptor href="#id" />
+  </descriptor>
+
+  <descriptor id="listAll" type="safe" />
+
+  <descriptor id="listActive" type="safe">
+    <descriptor href="#completed">
+      <doc>completed=false</doc>
+    </descriptor>
+  </descriptor>
+
+  <descriptor id="listCompleted" type="safe">
+    <descriptor href="#completed">
+      <doc>completed=true</doc>
+    </descriptor>
+  </descriptor>
+
+  <descriptor id="searchTasks" type="safe">
+    <descriptor href="#title" />
+  </descriptor>
+
+  <descriptor id="markComplete" type="unsafe">
+    <descriptor href="#id" />
+  </descriptor>
+
+  <descriptor id="markIncomplete" type="unsafe">
+    <descriptor href="#id" />
+  </descriptor>
+    
+</alpa>

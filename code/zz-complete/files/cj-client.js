@@ -3,6 +3,10 @@
  * May 2015
  * Mike Amundsen (@mamund)
  * Soundtrack : Complete Collection : B.B. King (2008)
+ *
+ * UI work
+ * Benjamin Young (@bigbluehat)
+ * Soundtrack : Burn the Clock : Adam Freeland (2003)
  *******************************************************/
 
 /*  
@@ -12,7 +16,6 @@
   - built/tested for chrome browser (YMMV on other browsers)
   - designed to act as a "validator" for a human-driven Cj client.
   - not production robust (missing error-handling, perf-tweaking, etc.)
-  - report issues to https://github.com/collection-json/cj-client
 */
 
 function cj() {
@@ -25,12 +28,13 @@ function cj() {
   g.ctype = "application/vnd.collection+json";
 
   // init library and start
-  function init(url) {
+  function init(url, title) {
     if(!url || url==='') {
       alert('*** ERROR:\n\nMUST pass starting URL to the Cj library');
     }
     else {
       g.url = url;
+      g.title = title||"Cj Client";
       req(g.url,"get");
     }
   }
@@ -39,6 +43,7 @@ function cj() {
   function parseCj() {
     dump();
     title();
+    content();
     links();
     items();
     queries();
@@ -55,28 +60,42 @@ function cj() {
   
   // handle title
   function title() {
-    var elm;
-    
+    var elm, str;
+
+
     if(hasTitle(g.cj.collection)===true) {
+      str = g.cj.collection.title||g.title;
       elm = d.find("title");
-      elm.innerText = g.cj.collection.title;
+      elm.innerText = str;
       elm = d.tags("title");
-      elm[0].innerText = g.cj.collection.title;
+      elm[0].innerText = str;
+    }
+  }
+
+  // handle content block
+  function content() {
+    var elm;
+
+    elm = d.find("content");
+    d.clear(elm);
+    if(g.cj.collection.content && (typeof g.cj.collection.content)==="string") {
+      elm.innerHTML = g.cj.collection.content.toString(); 
     }
   }
   
   // handle link collection
   function links() {
     var elm, coll;
-    var ul, li, a, img;
+    var menu, item, a, img;
     var head, lnk;
     
     elm = d.find("links");
     d.clear(elm);
     if(g.cj.collection.links) {
       coll = g.cj.collection.links;
-      ul = d.node("ul");
-      ul.onclick = httpGet;
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
+      menu.onclick = httpGet;
       
       for(var link of coll) {
 
@@ -89,18 +108,20 @@ function cj() {
         }
         
         // render embedded images, if asked
-        li = d.node("li");
         if(isImage(link)===true) {
+          item = d.node("div");
+          item.className = "item";
           img = d.image({href:link.href,className:link.rel});
-          d.push(img, li);
+          d.push(img, item);
+          d.push(item, menu);
         }
         else {
-          a = d.anchor({rel:link.rel,href:link.href,text:link.prompt});
-          d.push(a, li);
+          a = d.anchor({rel:link.rel,href:link.href,text:link.prompt,
+            className: "item"});
+          d.push(a, menu);
         }
-        d.push(li, ul);
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
@@ -108,108 +129,148 @@ function cj() {
   function items() {
     var elm, coll;
     var ul, li;
-    var dl, dt, dd;
-    var p, s1, s2, img;
+    var segment, buttons, table;
+    var p, img;
     var a1, a2, a3;
 
     elm = d.find("items");
     d.clear(elm);
     if(g.cj.collection.items) {
       coll = g.cj.collection.items;
-      ul = d.node("ul");
+      ul = d.node("div");
 
       for(var item of coll) {
-        li = d.node("li");
-        dl = d.node("dl");
-        dt = d.node("dt");
+        segment = d.node("div");
+        segment.className = "ui segment";
+        buttons = d.node("div");
+        buttons.className = "ui mini buttons";
         
         // item link
-        a1 = d.anchor({href:item.href,rel:item.rel,className:"item link",text:item.rel});
+        a1 = d.anchor(
+          {
+            href:item.href,
+            rel:item.rel,
+            className:"item link ui basic blue button",
+            text:item.rel
+          }
+        );
         a1.onclick = httpGet;
-        d.push(a1,dt);
+        d.push(a1,buttons);
         
         // edit link
         if(isReadOnly(item)===false && hasTemplate(g.cj.collection)===true) {
-          a2 = d.anchor({href:item.href,rel:"edit",className:"item action",text:"Edit"});
+          a2 = d.anchor(
+            {
+              href:item.href,
+              rel:"edit",
+              className:"item action ui positive button",
+              text:"Edit"
+            }
+          );
           a2.onclick = cjEdit;
-          d.push(a2, dt);
+          d.push(a2, buttons);
         }
 
         // delete link
         if(isReadOnly(item)===false) {
-          a3 = d.anchor({href:item.href,className:"item action",rel:"delete",text:"Delete"});
-          a3.onclick = httpDelete;
-          d.push(a3,dt);
-        }
-        d.push(dt,dl);
-
-        // CJ item data here
-        dd = d.node("dd");
-        for(var data of item.data) {
-          p = d.data({
-            className:"item "+data.name,
-            text:data.prompt+"&nbsp;",
-            value:data.value+"&nbsp;"}
+          a3 = d.anchor(
+            {
+              href:item.href,
+              className:"item action ui negative button",
+              rel:"delete",
+              text:"Delete"
+            }
           );
-          d.push(p,dd);
+          a3.onclick = httpDelete;
+          d.push(a3,buttons);
         }
 
-        // cj item links here
+        d.push(buttons,segment);
+
         if(item.links) {
+          secondary_buttons = d.node("div");
+          secondary_buttons.className = "ui mini buttons right floated";
+
           for(var link of item.links) {
-            p = d.node("p");
-            p.className = "item";
-            
             // render as images, if asked
+            // TODO: test this with the new semantic-ui styling
             if(isImage(link)===true) {
-              img = d.image({
-                className:"image "+link.rel, rel:link.rel,
-                href:link.href}
+              p = d.node("p");
+              p.className = "ui basic button";
+              img = d.image(
+                {
+                  className:"image "+link.rel,
+                  rel:link.rel,
+                  href:link.href
+                }
               );         
               d.push(img, p);
+              d.push(p,secondary_buttons);
             }
             else {
-              a = d.anchor({
-                className:"item", href:link.href,
-                rel:link.rel, text:link.prompt}
-                );
+              a = d.anchor(
+                {
+                  className:"ui basic blue button",
+                  href:link.href,
+                  rel:link.rel,
+                  text:link.prompt
+                }
+              );
               a.onclick = httpGet;
-              d.push(a, p);
+              d.push(a,secondary_buttons);
             }
-            d.push(p,dd);
           }
+          d.push(secondary_buttons,segment);
         }
-        
-        d.push(dd,dl);
-        d.push(dl,li);
-        d.push(li,ul);
+
+        d.push(segment,elm);
+
+        table = d.node("table");
+        table.className = "ui table";
+        for(var data of item.data) {
+          tr = d.data_row(
+            {
+              className:"item "+data.name,
+              text:data.prompt+"&nbsp;",
+              value:data.value+"&nbsp;"
+            }
+          );
+          d.push(tr,table);
+        }
+        d.push(table,segment);
       }
-      d.push(ul,elm);
+    }
+    if (elm.hasChildNodes()) {
+      elm.style.display = "block";
+    } else {
+      elm.style.display = "none";
     }
   }
   
   // handle query collection
   function queries() {
     var elm, coll;
-    var ul, li;
-    var form, fs, lg, p, lbl, inp;
+    var segment;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("queries");
     d.clear(elm);
     if(g.cj.collection.queries) {
-      ul = d.node("ul");
       coll = g.cj.collection.queries;
       for(var query of coll) {
-        li = d.node("li");
+        segment = d.node("div");
+        segment.className = "ui segment";
         form = d.node("form");
         form.action = query.href;
         form.className = query.rel;
         form.method = "get";
         form.onsubmit = httpQuery;
-        fs = d.node("fieldset");
-        lg = d.node("legend");
-        lg.innerHTML = query.prompt + "&nbsp;";
-        d.push(lg,fs);
+        fs = d.node("div");
+        fs.className = "ui form";
+        header = d.node("div");
+        header.innerHTML = query.prompt + "&nbsp;";
+        header.className = "ui dividing header";
+        d.push(header,fs);
         for(var data of query.data) {
           p = d.input({prompt:data.prompt,name:data.name,value:data.value});
           d.push(p,fs);
@@ -217,20 +278,27 @@ function cj() {
         p = d.node("p");
         inp = d.node("input");
         inp.type = "submit";
+        inp.className = "ui mini submit button";
         d.push(inp,p);
         d.push(p,fs);
         d.push(fs,form);
-        d.push(form,li);
-        d.push(li,ul);
+        d.push(form,segment);
+        d.push(segment,elm);
       }
-      d.push(ul,elm);
+
+      var wrapper = d.find("queries-wrapper");
+      if (elm.hasChildNodes()) {
+        wrapper.style.display = "block";
+      } else {
+        wrapper.style.display = "none";
+      }
     }
   }
   
   // handle template object
   function template() {
     var elm, coll;
-    var form, fs, lg, p, lbl, inp;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("template");
     d.clear(elm);
@@ -241,21 +309,39 @@ function cj() {
       form.method = "post";
       form.className = "add";
       form.onsubmit = httpPost;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
-      lg.innerHTML = "Add";
-      d.push(lg,fs);
+      fs = d.node("div");
+      fs.className = "ui form";
+      header = d.node("div");
+      header.className = "ui dividing header";
+      header.innerHTML = g.cj.collection.template.prompt||"Add";
+      d.push(header,fs);
       for(var data of coll) { 
-        p = d.input({prompt:data.prompt+"&nbsp;",name:data.name,value:data.value});
+        p = d.input(
+          {
+            prompt:data.prompt+"&nbsp;",
+            name:data.name,
+            value:data.value,
+            required:data.required,
+            readOnly:data.readOnly,
+            pattern:data.pattern
+          }
+        );
         d.push(p,fs);
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui positive mini submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
       d.push(fs,form);
       d.push(form, elm);
+    }
+
+    if (elm.hasChildNodes()) {
+      elm.style.display = "block";
+    } else {
+      elm.style.display = "none";
     }
   }
   
@@ -268,10 +354,13 @@ function cj() {
     if(g.cj.collection.error) {
       obj = g.cj.collection.error;
 
-      p = d.para({className:"code",text:obj.code});
+      p = d.para({className:"title",text:obj.title});
       d.push(p,elm);
 
-      p = d.para({className:"title",text:obj.title});
+      p = d.para({className:"message",text:obj.message});
+      d.push(p,elm);
+
+      p = d.para({className:"code",text:obj.code});
       d.push(p,elm);
 
       p = d.para({className:"url",text:obj.url});
@@ -286,7 +375,7 @@ function cj() {
   // render editable form for an item
   function cjEdit(e) {
     var elm, coll;
-    var form, fs, lg, p, lbl, inp;
+    var form, fs, header, p, lbl, inp;
     var data, item, dv, tx;
     
     elm = d.find("edit");
@@ -300,10 +389,12 @@ function cj() {
       form.method = "put";
       form.className = "edit";
       form.onsubmit = httpPut;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
-      lg.innerHTML = "Edit";
-      d.push(lg,fs);
+      fs = d.node("div");
+      fs.className = "ui form";
+      header = d.node("div");
+      header.className = "ui dividing header";
+      header.innerHTML = "Edit";
+      d.push(header,fs);
       
       // get template for editing
       coll = g.cj.collection.template.data;
@@ -315,6 +406,7 @@ function cj() {
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui positive mini submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
@@ -335,11 +427,19 @@ function cj() {
     return (collection.title && collection.title.length!==-1);
   }
   function hasTemplate(collection) {
-    return (collection.template && Array.isArray(collection.template.data)===true);
+    return (
+      collection.template && 
+      Array.isArray(collection.template.data)===true && 
+      collection.template.data.length!==0
+    );
   }
   function isHiddenLink(link) {
     var rtn = false;
-    if(link.render && (link.render==="none" || link.render==="hidden" || link.rel==="stylesheet")) {
+    if(link.render && 
+      (link.render==="none" || 
+       link.render==="hidden" || 
+       link.rel==="stylesheet")) 
+    {
       rtn = true;
     }
     return rtn;
@@ -364,7 +464,8 @@ function cj() {
     rtn = null;
     coll = g.cj.collection.items;
     for(var item of coll) {
-      if(item.href.replace('http:','').replace('https:','')===url.replace('http:','').replace('https:','')) {
+      if(item.href.replace('http:','').replace('https:','')===
+        url.replace('http:','').replace('https:','')) {
         rtn = item;
         break;
       }
@@ -391,7 +492,9 @@ function cj() {
   
   // mid-level HTTP handlers
   function httpGet(e) {
-    req(e.target.href, "get", null);
+    if (undefined !== e.target.href) {
+      req(e.target.href, "get", null);
+    }
     return false;
   }
   function httpQuery(e) {

@@ -45,7 +45,7 @@ function main(req, res, parts, respond) {
           addItem(req, res, respond);
           break;
         case "completed":
-          completeItem(req, res, respond);
+          // ** EXERCISE: add call to completeItem(req, res, respond);
           break;
         default:
           respond(req, res, utils.errorResponse(req, res, 'Method Not Allowed', 405));

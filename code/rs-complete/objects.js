@@ -141,7 +141,6 @@ function completeTask(elm, id) {
   }
   return rtn;
 }
-
 // produce clean array of items
 function getList(elm) {
   var coll;

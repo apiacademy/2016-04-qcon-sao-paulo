@@ -36,7 +36,8 @@ function main(object, mimeType, root) {
       doc = wstl(object, root);
       break;
     default:
-      doc = wstl(object, root);
+      //doc = wstl(object, root);
+      doc = cj(object, root);
       break;
   }
 
