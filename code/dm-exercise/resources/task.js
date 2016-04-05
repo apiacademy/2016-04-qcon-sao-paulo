@@ -134,11 +134,8 @@ function removeItem(req, res, respond, id) {
   
   // execute
   try {
-    doc = data({name:'task',action:'remove', id:id});
-    if(doc && doc.type==='error') {
-      doc = utils.errorResponse(req, res, doc.message, doc.code);    
-    }
-  } 
+    data({name:'task',action:'remove', id:id});
+  }
   catch (ex) {
     doc = utils.errorResponse(req, res, 'Server Error', 500);
   }
